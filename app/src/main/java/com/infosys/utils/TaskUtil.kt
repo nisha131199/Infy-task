@@ -11,8 +11,10 @@ object TaskUtil {
         return context.assets.open(fileName).bufferedReader().use { it.readText() }
     }
 
-    fun parseJsonToModel(jsonString: String): List<CityDetails> {
+    fun parseJsonToModel(jsonString: String): Map<String?, List<CityDetails>> {
         val gson = Gson()
-        return gson.fromJson(jsonString, object : TypeToken<List<CityDetails>>() {}.type)
+        val list = gson.fromJson<List<CityDetails>>(jsonString, object : TypeToken<List<CityDetails>>() {}.type)
+        val groupOfState = list.groupBy { it.adminName }
+        return groupOfState
     }
 }

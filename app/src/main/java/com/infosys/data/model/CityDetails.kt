@@ -13,6 +13,5 @@ data class CityDetails(
     var capital: String? = null,
     var population: String? = null,
     @SerializedName("population_proper")
-    var populationProper : String? = null,
-    var isExpanded: Boolean = false
+    var populationProper : String? = null
 )

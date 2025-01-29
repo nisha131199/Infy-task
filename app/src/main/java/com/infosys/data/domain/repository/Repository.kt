@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class Repository (private val dataSource: DataSource) {
-    fun fetchCitiesList(): Flow<Resource<List<CityDetails>>> {
+    fun fetchCitiesList(): Flow<Resource<Map<String?, List<CityDetails>>>> {
         return flow {
             val response = dataSource.fetchCitiesList()
             if(response.isSuccessful){

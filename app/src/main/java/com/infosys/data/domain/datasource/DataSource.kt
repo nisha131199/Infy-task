@@ -8,7 +8,7 @@ import retrofit2.Response
 class DataSource (
     val context: Context,
 ) {
-    fun fetchCitiesList(): Response<List<CityDetails>> {
+    fun fetchCitiesList(): Response<Map<String?, List<CityDetails>>> {
         val json = TaskUtil.readJsonFromAssets(context, "au_cities.json")
         val citiesResponse = TaskUtil.parseJsonToModel(json)
         return Response.success(citiesResponse)
