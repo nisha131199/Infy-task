@@ -68,7 +68,7 @@ fun Greeting(name: String, viewModel: MainViewModel) {
                 viewModel.fetchCitiesList()
             }
         ) {
-            Text(text = "Reverse", Modifier.background(Pink40), color = White)
+            Text(text = "Reverse", Modifier.background(Pink40).padding(8.dp), color = White)
         }
         Spacer(modifier = Modifier.height(16.dp))
         AnimateExpandableList(data.data!!)
@@ -76,7 +76,7 @@ fun Greeting(name: String, viewModel: MainViewModel) {
 }
 
 @Composable
-fun AnimateExpandableList(citiesResponse: Map<String?, List<CityDetails>>) {
+fun AnimateExpandableList(citiesResponse: Collection<Map.Entry<String?, List<CityDetails>>>) {
     val expandedStates = remember { mutableStateListOf(*BooleanArray(citiesResponse.size) { false }.toTypedArray()) }
     val listState = rememberLazyListState()
 
@@ -87,7 +87,7 @@ fun AnimateExpandableList(citiesResponse: Map<String?, List<CityDetails>>) {
         state = listState
     ) {
 
-        itemsIndexed(citiesResponse.entries.toList()) {index: Int, item: Map.Entry<String?, List<CityDetails>> ->
+        itemsIndexed(citiesResponse.toList()) {index: Int, item: Map.Entry<String?, List<CityDetails>> ->
             ExpandableListItem(
                 item = item,
                 isExpanded = expandedStates[index],

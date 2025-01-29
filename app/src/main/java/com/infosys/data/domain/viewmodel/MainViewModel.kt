@@ -16,8 +16,8 @@ import javax.inject.Inject
 open class MainViewModel @Inject constructor(
     val repository: Repository
 ): ViewModel() {
-    private var _response = MutableStateFlow<Resource<Map<String?, List<CityDetails>>?>>(Resource.Loading())
-    val response: StateFlow<Resource<Map<String?, List<CityDetails>>?>> = _response
+    private var _response = MutableStateFlow<Resource<Collection<Map.Entry<String?, List<CityDetails>>>?>>(Resource.Loading())
+    val response: StateFlow<Resource<Collection<Map.Entry<String?, List<CityDetails>>>?>> = _response
 
     private var _responseHasReverse = MutableStateFlow(false)
     val responseHasReverse: StateFlow<Boolean> = _responseHasReverse
@@ -33,13 +33,11 @@ open class MainViewModel @Inject constructor(
                     _response.value = Resource.Success(
                         if (responseHasReverse.value) {
                             _responseHasReverse.value = false
-                            it.data?.flatMap { (key, list) ->
-                                list.map{data -> key to data}
-                            }?.groupBy({ it.first}, {it.second})
+                            it.data?.entries?.reversed()
                         }
                         else {
                             _responseHasReverse.value = true
-                            it.data
+                            it.data?.entries
                         }
                     )
                 }
