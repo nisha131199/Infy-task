@@ -12,10 +12,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,16 +32,15 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.infosys.data.domain.viewmodel.MainViewModel
 import com.infosys.data.model.CityDetails
 import com.infosys.ui.theme.Pink40
 import com.infosys.ui.theme.Pink80
+import com.infosys.ui.theme.Typography
 import com.infosys.ui.theme.White
 
 @Composable
@@ -53,24 +49,31 @@ fun Greeting(name: String, viewModel: MainViewModel) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 30.dp, horizontal = 16.dp)
+            .padding(vertical = 40.dp, horizontal = 16.dp)
     ) {
         Text(
             text = "Hello $name!",
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center
+            style = Typography.titleLarge
         )
         TextButton(
             onClick = {
                 viewModel.fetchCitiesList()
             }
         ) {
-            Text(text = "Reverse", Modifier.background(Pink40).padding(8.dp), color = White)
+            Text(
+                text = "Reverse",
+                modifier = Modifier
+                    .clip(roundShapeCorner8())
+                    .background(Pink40)
+                    .padding(8.dp),
+                color = White,
+                style = Typography.titleSmall
+            )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(16)
         AnimateExpandableList(data.data!!)
     }
 }
@@ -83,7 +86,6 @@ fun AnimateExpandableList(citiesResponse: Collection<Map.Entry<String?, List<Cit
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-//        contentPadding = PaddingValues(top = 16.dp, bottom = 32.dp),
         state = listState
     ) {
 
@@ -109,7 +111,7 @@ fun ExpandableListItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(4.dp, shape = RoundedCornerShape(12.dp))
+            .shadow(4.dp, shape = roundShapeCorner12())
             .background(
                 color = Pink80,
                 shape = RoundedCornerShape(12.dp)
@@ -128,8 +130,7 @@ fun ExpandableListItem(
             )
             Text(
                 text = item.key.toString(),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleMedium,
+                style = Typography.titleLarge,
                 modifier = Modifier.weight(1f),
                 color = White
             )
@@ -152,25 +153,15 @@ fun ExpandableListItem(
             ) {
                 Text(
                     text = "Cities:=",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = White,
-                    fontSize = 18.sp
+                    style = Typography.labelLarge,
+                    color = White
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(4)
                 item.value.forEach {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    MyText(text = "${it.city}")
+                    Spacer(4)
+                    TextTitleMedium(text = "${it.city}")
                 }
             }
         }
     }
-}
-
-@Composable
-fun MyText(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodySmall,
-        color = White.copy(alpha = 0.6f)
-    )
 }
